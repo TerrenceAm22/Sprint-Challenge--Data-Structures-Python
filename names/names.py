@@ -13,10 +13,72 @@ f.close()
 duplicates = []  # Return the list of duplicates in this data structure
 
 # Replace the nested for loops below with your improvements
+# for name_1 in names_1:
+#     for name_2 in names_2:
+#         if name_1 == name_2:
+#             duplicates.append(name_1)
+
+class BSTNode:
+    def __init__(self, value):  # value = 5
+        self.value = value
+        self.left = None
+        self.right = None
+
+    # Insert the given value into the tree
+    def insert(self, value):
+        #value < self.value look left
+        if value < self.value:
+            #if something is there already
+            if self.left:
+                #recurse left
+                self.left.insert(value)
+            #if not
+            else:
+                #insert left
+                self.left = BSTNode(value)
+        #value < self.value look right
+        if value >= self.value:
+            #if something is there already
+            if self.right:
+                #recurse right
+                self.right.insert(value)
+            #if not
+            else:
+                #insert right
+                self.right = BSTNode(value)
+
+    # Return True if the tree contains the value
+    # False if it does not
+    def dupe(self, target):
+        if self.value == target:
+            return True
+
+        elif target > self.value:
+            if self.right is not None:
+                return self.right.dupe(target)
+            else:
+                return False
+
+        else:
+            if self.left is not None:  # we have a left child
+                return self.left.dupe(target)  # hand the target off teh left child
+            else:
+                return False
+
+
+# Initialize the BST with the first value in the name_1 array
+tree = BSTNode(names_1[0])
+
+# insert all values from names_1.txt into the tree
 for name_1 in names_1:
-    for name_2 in names_2:
-        if name_1 == name_2:
-            duplicates.append(name_1)
+    tree.insert(name_1)
+
+# if the tree contains any duplicates from names_1 array add it to the duplicates array
+for name_2 in names_2:
+    if tree.dupe(name_2):
+        duplicates.append(name_2)
+
+
 
 end_time = time.time()
 print (f"{len(duplicates)} duplicates:\n\n{', '.join(duplicates)}\n\n")
